@@ -162,7 +162,7 @@ class GunChulo(RelativeLayout):
         self.operation = f'{self.first} {self.operator} {self.second}'
         self.result = str(eval(self.operation))
         self.response = ''
-        GunArea.update_colors(GunArea)
+        GunAdministrator.update_colors(GunAdministrator)
 
 
 class Sum(GunChulo):
@@ -184,7 +184,7 @@ class InputAreaChulo(Widget):
     pass
 
 
-class GunArea(Widget):
+class GunAdministrator(Widget):
     guns = []
 
     def __init__(self, **kwargs):
@@ -242,10 +242,10 @@ class InputArea(GridLayout):
 
     @staticmethod
     def type_number(text):
-        for gun in GunArea.guns:
+        for gun in GunAdministrator.guns:
             if gun.state == 'ON':
                 gun.response += text
-        GunArea.update_colors(GunArea)
+        GunAdministrator.update_colors(GunAdministrator)
 
 
 class WarZone(Widget):
@@ -283,7 +283,7 @@ class MyApp(App):
     def build(self):
         ob = WarZone()
         ob.add_widget(Gun())
-        ob.add_widget(GunArea())
+        ob.add_widget(GunAdministrator())
         ob.add_widget(InputArea())
         Clock.schedule_interval(ob.update, 1 / 60)
         Clock.schedule_interval(ob.spawn_enemy, 2)
