@@ -48,6 +48,11 @@ Builder.load_string('''
     Button:
         text: '9'
         on_press: root.type_number(self.text)
+<InputAreaChulo>:
+    Button:
+        pos: 700, 0
+        text: '123'
+        on_press: root.parent.type_number(self.text)
 <Enemy>:
     size: root.s, root.s
     canvas:
@@ -175,6 +180,10 @@ class Sub(GunChulo):
     result = str(eval(operation))
 
 
+class InputAreaChulo(Widget):
+    pass
+
+
 class GunArea(Widget):
     guns = []
 
@@ -190,6 +199,8 @@ class GunArea(Widget):
         self.add_widget(gun2)
         self.guns.append(gun1)
         self.guns.append(gun2)
+
+        self.add_widget(InputAreaChulo())
 
     def all_off(self):
         for gun in self.guns:
@@ -214,6 +225,13 @@ class GunArea(Widget):
                 gun.color = [0, 0, 1, 1]
             else:
                 gun.color = [1, 1, 1, 1]
+
+    def type_number(self, text):
+        print(text)
+        for gun in self.guns:
+            if gun.state == 'ON':
+                gun.response += text
+        self.update_colors()
 
 
 class InputArea(GridLayout):
