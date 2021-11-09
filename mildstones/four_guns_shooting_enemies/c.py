@@ -16,7 +16,7 @@ class String:
 
 
 Builder.load_string('''
-<InputAreaChulo>:
+<InputArea>:
     GridLayout:
         pos: 500, 0
         size: 200, 200
@@ -161,7 +161,8 @@ class GunChulo(RelativeLayout):
         self.operation = f'{self.first} {self.operator} {self.second}'
         self.result = str(eval(self.operation))
         self.response = ''
-        GunAdministrator.update_colors(GunAdministrator)
+        self.state = 'OFF'
+        self.color = [1 for _ in range(4)]
 
 
 class Sum(GunChulo):
@@ -179,7 +180,7 @@ class Sub(GunChulo):
     result = str(eval(operation))
 
 
-class InputAreaChulo(Widget):
+class InputArea(Widget):
     pass
 
 
@@ -198,8 +199,7 @@ class GunAdministrator(Widget):
         self.add_widget(gun2)
         self.guns.append(gun1)
         self.guns.append(gun2)
-
-        self.add_widget(InputAreaChulo())
+        self.add_widget(InputArea())
 
     def all_off(self):
         for gun in self.guns:
@@ -259,7 +259,7 @@ class WarZone(Widget):
                     self.enemies.remove(enemy)
                     self.remove_widget(enemy)
             if enemy.check_conquest():
-                pass  # TODO: Game Over Routine.
+                pass  # TODO: Run Game Over Routine.
         for bullet in self.bullets:
             bullet.move('dt')
 
