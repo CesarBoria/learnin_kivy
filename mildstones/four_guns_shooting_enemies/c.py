@@ -10,6 +10,11 @@ from kivy.uix.screenmanager import ScreenManager
 from kivy.properties import StringProperty, NumericProperty, ObjectProperty, ListProperty
 from kivy.clock import Clock
 
+
+class String:
+    pass
+
+
 Builder.load_string('''
 <InputArea>:
     rows: 2
@@ -211,7 +216,21 @@ class GunArea(Widget):
                 gun.color = [1, 1, 1, 1]
 
 
-class NonThings(Widget):
+class InputArea(GridLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.pos = 500, 0
+        self.size = 200, 200
+
+    @staticmethod
+    def type_number(text):
+        for gun in GunArea.guns:
+            if gun.state == 'ON':
+                gun.response += text
+        GunArea.update_colors(GunArea)
+
+
+class WarZone(Widget):
     enemies = []
     bullets = Gun.bullets
     bullets_Sum = GunChulo.bullets
@@ -242,26 +261,10 @@ class NonThings(Widget):
             bullet.move('dt')
 
 
-class InputArea(GridLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.pos = 500, 0
-        self.size = 200, 200
-
-    @staticmethod
-    def type_number(text):
-        for gun in GunArea.guns:
-            if gun.state == 'ON':
-                gun.response += text
-                print(gun.result, gun.response)
-        GunArea.update_colors(GunArea)
-
-
 class MyApp(App):
     def build(self):
-        ob = NonThings()
-        g = Gun()
-        ob.add_widget(g)
+        ob = WarZone()
+        ob.add_widget(Gun())
         ob.add_widget(GunArea())
         ob.add_widget(InputArea())
         Clock.schedule_interval(ob.update, 1 / 60)
