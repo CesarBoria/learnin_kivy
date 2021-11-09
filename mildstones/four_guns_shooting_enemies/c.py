@@ -16,41 +16,10 @@ class String:
 
 
 Builder.load_string('''
-<InputArea>:
-    rows: 2
-    Button:
-        text: '0'
-        on_press: root.type_number(self.text)
-    Button:
-        text: '1'
-        on_press: root.type_number(self.text)
-    Button:
-        text: '2'
-        on_press: root.type_number(self.text)
-    Button:
-        text: '3'
-        on_press: root.type_number(self.text)
-    Button:
-        text: '4'
-        on_press: root.type_number(self.text)
-    Button:
-        text: '5'
-        on_press: root.type_number(self.text)
-    Button:
-        text: '6'
-        on_press: root.type_number(self.text)
-    Button:
-        text: '7'
-        on_press: root.type_number(self.text)
-    Button:
-        text: '8'
-        on_press: root.type_number(self.text)
-    Button:
-        text: '9'
-        on_press: root.type_number(self.text)
 <InputAreaChulo>:
     GridLayout:
-        pos: 700, 0
+        pos: 500, 0
+        size: 200, 200
         rows: 2
         Button:
             text: '0'
@@ -264,20 +233,6 @@ class GunAdministrator(Widget):
         self.update_colors()
 
 
-class InputArea(GridLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.pos = 500, 0
-        self.size = 200, 200
-
-    @staticmethod
-    def type_number(text):
-        for gun in GunAdministrator.guns:
-            if gun.state == 'ON':
-                gun.response += text
-        GunAdministrator.update_colors(GunAdministrator)
-
-
 class WarZone(Widget):
     enemies = []
     bullets = Gun.bullets
@@ -314,7 +269,6 @@ class MyApp(App):
         ob = WarZone()
         ob.add_widget(Gun())
         ob.add_widget(GunAdministrator())
-        ob.add_widget(InputArea())
         Clock.schedule_interval(ob.update, 1 / 60)
         Clock.schedule_interval(ob.spawn_enemy, 2)
         return ob
