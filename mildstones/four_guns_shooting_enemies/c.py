@@ -49,10 +49,40 @@ Builder.load_string('''
         text: '9'
         on_press: root.type_number(self.text)
 <InputAreaChulo>:
-    Button:
+    GridLayout:
         pos: 700, 0
-        text: '123'
-        on_press: root.parent.type_number(self.text)
+        rows: 2
+        Button:
+            text: '0'
+            on_press: root.parent.type_number(self.text)
+        Button:
+            text: '1'
+            on_press: root.parent.type_number(self.text)
+        Button:
+            text: '2'
+            on_press: root.parent.type_number(self.text)
+        Button:
+            text: '3'
+            on_press: root.parent.type_number(self.text)
+        Button:
+            text: '4'
+            on_press: root.parent.type_number(self.text)
+        Button:
+            text: '5'
+            on_press: root.parent.type_number(self.text)
+        Button:
+            text: '6'
+            on_press: root.parent.type_number(self.text)
+        Button:
+            text: '7'
+            on_press: root.parent.type_number(self.text)
+        Button:
+            text: '8'
+            on_press: root.parent.type_number(self.text)
+        Button:
+            text: '9'
+            on_press: root.parent.type_number(self.text)
+
 <Enemy>:
     size: root.s, root.s
     canvas:
