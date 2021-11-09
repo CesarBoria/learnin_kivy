@@ -54,6 +54,12 @@ Builder.load_string('''
 
 <Enemy>:
     size: root.s, root.s
+    canvas.after:
+        Color:
+            rgba: 1, 0, 0, 0.5
+        Rectangle:
+            pos: root.pos
+            size: root.size
     canvas:
         Rectangle:
             pos: self.pos
@@ -63,8 +69,8 @@ Builder.load_string('''
         Color:
             rgba: 1, 0, 0, 0.5
         Rectangle:
-            pos: self.pos
-            size: self.size
+            pos: root.pos
+            size: root.size
     canvas:
         Rectangle:
             pos: self.width/2-5, self.y
