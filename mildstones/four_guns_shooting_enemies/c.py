@@ -71,6 +71,11 @@ Builder.load_string('''
         Rectangle:
             pos: root.pos
             size: root.size
+        Color:
+            rgba: 0, 1, 0, 0.5
+        Rectangle:
+            pos: self.pos
+            size: self.size
     canvas:
         Rectangle:
             pos: self.width/2-5, self.y
@@ -82,7 +87,6 @@ Builder.load_string('''
         on_release: root.parent.button_clicked(root)
         background_color: root.color
         pos: 100, 0
-
 <Gun>:
     Button:
         text: 'GUN'
@@ -109,10 +113,6 @@ class Enemy(Widget):
 
 
 class Bullet(Widget):
-    @staticmethod
-    def appear():
-        t = Bullet()
-
     def move(self, dt):
         self.y += 10
 
@@ -127,7 +127,6 @@ class Gun(Widget):
 
     def spawn_bullet(self):
         self.b = Bullet()
-        self.b.appear()
         self.add_widget(self.b)
         self.bullets.append(self.b)
 
@@ -154,7 +153,6 @@ class GunChulo(RelativeLayout):
 
     def spawn_bullet(self):
         self.b = Bullet()
-        self.b.appear()
         self.add_widget(self.b)
         self.bullets.append(self.b)
 
@@ -243,27 +241,38 @@ class WarZone(Widget):
     enemies = []
     bullets = Gun.bullets
     bullets_Sum = GunChulo.bullets
+    # bullets_Sub = GunChulo.bullets
 
     def spawn_enemy(self, dt):
         enemy = Enemy()
         self.enemies.append(enemy)
         self.add_widget(enemy)
 
-    def update(self, dt):
+    def move_enemies(self):
         for enemy in self.enemies:
             enemy.move()
+
+    def kill_enemy(self, enemy):
+        self.remove_widget(enemy)
+        self.enemies.remove(enemy)
+
+    def kill_bullet(self, bullet):
+        # self.bullets.remove(bullet)  # This one only works with the simple gun.
+        #bullet.shooting_event.unschedule() The Gun has the property shooting event, not the bullet.
+        self.bullets.clear()
+        self.remove_widget(bullet)
+
+    def update(self, dt):
+        self.move_enemies()
+        for enemy in self.enemies:
             for bullet in self.bullets:
                 if enemy.check_collision(bullet):
-                    self.bullets.clear()
-                    self.remove_widget(bullet)
-                    self.enemies.remove(enemy)
-                    self.remove_widget(enemy)
+                    self.kill_bullet(bullet=bullet)
+                    self.kill_enemy(enemy=enemy)
             for bullet in self.bullets_Sum:
                 if enemy.check_collision(bullet):
-                    self.bullets.clear()
-                    self.remove_widget(bullet)
-                    self.enemies.remove(enemy)
-                    self.remove_widget(enemy)
+                    self.kill_bullet(bullet=bullet)
+                    self.kill_enemy(enemy=enemy)
             if enemy.check_conquest():
                 pass  # TODO: Run Game Over Routine.
         for bullet in self.bullets:
