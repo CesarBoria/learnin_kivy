@@ -1,7 +1,8 @@
 from kivy.app import App
 from kivy.clock import Clock
 
-from mastering_imports.areas import WarZone, Gun, GunAdministrator
+from mastering_imports.gun_administrator import Gun, GunAdministrator
+from mastering_imports.war_zone import WarZone
 
 
 class MyApp(App):
