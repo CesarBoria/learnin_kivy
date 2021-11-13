@@ -28,6 +28,7 @@ class WarZone(Widget):
         # self.bullets.remove(bullet)  # This one only works with the simple gun.
         # bullet.shooting_event.unschedule() The Gun has the property shooting event, not the bullet.
         self.bullets.clear()
+        self.bullets_Sum.clear()
         self.remove_widget(bullet)
 
     def update(self, dt):
