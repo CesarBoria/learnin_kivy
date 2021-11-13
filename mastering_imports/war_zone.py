@@ -25,7 +25,7 @@ class WarZone(Widget):
         self.remove_widget(enemy)
         self.enemies.remove(enemy)
 
-    def kill_bullet(self, bullet):
+    def kill_specific_bullet(self, bullet):
         # self.bullets.remove(bullet)  # This one only works with the simple gun.
         # bullet.shooting_event.unschedule() The Gun has the property shooting event, not the bullet.
         self.bullets.clear()
@@ -35,12 +35,14 @@ class WarZone(Widget):
     def kill_corresponding_enemies_bullets(self):
         for enemy in self.enemies:
             for bullet in self.bullets:
+                print(self.bullets)
                 if enemy.check_collision(bullet):
-                    self.kill_bullet(bullet=bullet)
+                    self.kill_specific_bullet(bullet=bullet)
                     self.kill_specific_enemy(enemy=enemy)
+                print(self.bullets)
             for bullet in self.bullets_Sum:
                 if enemy.check_collision(bullet):
-                    self.kill_bullet(bullet=bullet)
+                    self.kill_specific_bullet(bullet=bullet)
                     self.kill_specific_enemy(enemy=enemy)
 
     def game_over(self):
