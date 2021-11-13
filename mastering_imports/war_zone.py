@@ -9,6 +9,7 @@ class WarZone(Widget):
     enemies = []
     bullets = Gun.bullets
     bullets_Sum = GunChulo.bullets
+
     # bullets_Sub = GunChulo.bullets
 
     def spawn_enemy(self, dt):
@@ -20,7 +21,7 @@ class WarZone(Widget):
         for enemy in self.enemies:
             enemy.move()
 
-    def kill_enemy(self, enemy):
+    def kill_specific_enemy(self, enemy):
         self.remove_widget(enemy)
         self.enemies.remove(enemy)
 
@@ -31,21 +32,26 @@ class WarZone(Widget):
         self.bullets_Sum.clear()
         self.remove_widget(bullet)
 
-    def update(self, dt):
-        self.move_enemies()
+    def kill_corresponding_enemies_bullets(self):
         for enemy in self.enemies:
             for bullet in self.bullets:
                 if enemy.check_collision(bullet):
                     self.kill_bullet(bullet=bullet)
-                    self.kill_enemy(enemy=enemy)
+                    self.kill_specific_enemy(enemy=enemy)
             for bullet in self.bullets_Sum:
                 if enemy.check_collision(bullet):
                     self.kill_bullet(bullet=bullet)
-                    self.kill_enemy(enemy=enemy)
+                    self.kill_specific_enemy(enemy=enemy)
+
+    def game_over(self):
+        for enemy in self.enemies:
             if enemy.check_conquest():
                 pass  # TODO: Run Game Over Routine.
-        for bullet in self.bullets:
-            bullet.move('dt')
+
+    def update(self, dt):
+        self.move_enemies()
+        self.kill_corresponding_enemies_bullets()
+        self.game_over()
 
 
 if __name__ == '__main__':
