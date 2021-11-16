@@ -8,8 +8,8 @@ from mastering_imports.war_zone import WarZone
 class MyApp(App):
     def build(self):
         ob = WarZone()
-        ob.add_widget(Gun())
-        ob.add_widget(GunAdministrator())
+        ob.add_widget(Gun(ob))
+        ob.add_widget(GunAdministrator(ob))
         Clock.schedule_interval(ob.update, 1 / 60)
         Clock.schedule_interval(ob.spawn_enemy, 2)
         return ob

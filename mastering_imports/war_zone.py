@@ -26,9 +26,8 @@ class WarZone(Widget):
         self.enemies.remove(enemy)
 
     def kill_specific_bullet(self, bullet):
-        # self.bullets.remove(bullet)  # This one only works with the simple gun.
-        # bullet.shooting_event.unschedule() The Gun has the property shooting event, not the bullet.
-        self.bullets.clear()
+        self.bullets.remove(bullet)  # This one only works with the simple gun.
+        # self.bullets.clear()
         self.bullets_Sum.clear()
         self.remove_widget(bullet)
 
@@ -60,10 +59,11 @@ if __name__ == '__main__':
     class GunAdministrator(Widget):
         guns = []
 
-        def __init__(self, **kwargs):
+        def __init__(self, GUI, **kwargs):
             super().__init__(**kwargs)
-            gun1 = Sum()
-            gun2 = Sub()
+            self.GUI = GUI
+            gun1 = Sum(self.GUI)
+            gun2 = Sub(self.GUI)
             gun2.pos = 200, 0
             gun2.size = 200, 200
             gun1.pos = 0, 0
@@ -109,8 +109,8 @@ if __name__ == '__main__':
     class MyApp(App):
         def build(self):
             ob = WarZone()
-            ob.add_widget(Gun())
-            ob.add_widget(GunAdministrator())
+            ob.add_widget(Gun(ob))
+            ob.add_widget(GunAdministrator(ob))
             Clock.schedule_interval(ob.update, 1 / 60)
             Clock.schedule_interval(ob.spawn_enemy, 2)
             return ob

@@ -112,15 +112,16 @@ class Bullet(Widget):
 class Gun(Widget):
     bullets = []
 
-    def __init__(self, **kwargs):
+    def __init__(self, GUI, **kwargs):
         super().__init__(**kwargs)
+        self.GUI = GUI
         self.b = None
         self.shooting_event = None
 
     def spawn_bullet(self):
         self.b = Bullet()
-        self.add_widget(self.b)
-        self.bullets.append(self.b)
+        self.GUI.add_widget(self.b)
+        self.GUI.bullets.append(self.b)
 
     def shoot(self):
         self.spawn_bullet()
@@ -138,15 +139,16 @@ class GunChulo(RelativeLayout):
     color = ListProperty([1 for i in range(4)])
     bullets = []
 
-    def __init__(self, **kwargs):
+    def __init__(self, holder, **kwargs):
         super().__init__(**kwargs)
+        self.holder = holder
         self.b = None
         self.shooting_event = None
 
     def spawn_bullet(self):
         self.b = Bullet()
-        self.add_widget(self.b)
-        self.bullets.append(self.b)
+        self.holder.add_widget(self.b)
+        self.holder.bullets.append(self.b)
 
     def shoot(self):
         self.spawn_bullet()
@@ -184,10 +186,11 @@ if __name__ == '__main__':
     class GunAdministrator(Widget):
         guns = []
 
-        def __init__(self, **kwargs):
+        def __init__(self, GUI, **kwargs):
             super().__init__(**kwargs)
-            gun1 = Sum()
-            gun2 = Sub()
+            self.GUI = GUI
+            gun1 = Sum(self.GUI)
+            gun2 = Sub(self.GUI)
             gun2.pos = 200, 0
             gun2.size = 200, 200
             gun1.pos = 0, 0
@@ -276,8 +279,8 @@ if __name__ == '__main__':
     class MyApp(App):
         def build(self):
             ob = WarZone()
-            ob.add_widget(Gun())
-            ob.add_widget(GunAdministrator())
+            ob.add_widget(Gun(ob))
+            ob.add_widget(GunAdministrator(ob))
             Clock.schedule_interval(ob.update, 1 / 60)
             Clock.schedule_interval(ob.spawn_enemy, 2)
             return ob

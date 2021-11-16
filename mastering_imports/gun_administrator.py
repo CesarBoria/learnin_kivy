@@ -8,10 +8,11 @@ from mastering_imports.objects import Sum, Sub, InputArea, Gun, GunChulo, Enemy
 class GunAdministrator(Widget):
     guns = []
 
-    def __init__(self, **kwargs):
+    def __init__(self, GUI, **kwargs):
         super().__init__(**kwargs)
-        gun1 = Sum()
-        gun2 = Sub()
+        self.GUI = GUI
+        gun1 = Sum(self.GUI)
+        gun2 = Sub(self.GUI)
         gun2.pos = 200, 0
         gun2.size = 200, 200
         gun1.pos = 0, 0
@@ -101,8 +102,8 @@ if __name__ == '__main__':
     class MyApp(App):
         def build(self):
             ob = WarZone()
-            ob.add_widget(Gun())
-            ob.add_widget(GunAdministrator())
+            ob.add_widget(Gun(ob))
+            ob.add_widget(GunAdministrator(ob))
             Clock.schedule_interval(ob.update, 1 / 60)
             Clock.schedule_interval(ob.spawn_enemy, 2)
             return ob
