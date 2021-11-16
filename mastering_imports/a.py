@@ -46,16 +46,16 @@ class Bullet(Widget):
 
 
 class Gun(Widget):
-    def __init__(self, **kwargs):
+    def __init__(self, GUI, **kwargs):
         super().__init__(**kwargs)
         self.b = None
         self.shooting_event = None
-        self.GUI = MainGUI()
+        self.GUI = GUI
 
     def spawn_bullet(self):
         self.b = Bullet()
-        main_gui.add_widget(self.b)
-        main_gui.bullets.append(self.b)
+        self.GUI.add_widget(self.b)
+        self.GUI.bullets.append(self.b)
 
     def shoot(self):
         self.spawn_bullet()
@@ -83,17 +83,13 @@ class MainGUI(Widget):
                     self.bullets.remove(bullet)  # Remove the bullet from the list of bullets.
 
 
-main_gui = MainGUI()
-main_gui.add_widget(Gun())
-
-
 class MyApp(App):
     def build(self):
-        # ob = WarZone()
-        # ob.add_widget(Gun())
-        Clock.schedule_interval(main_gui.update, 1 / 60)
-        Clock.schedule_interval(main_gui.spawn_enemy, 2)
-        return main_gui
+        ob = MainGUI()
+        ob.add_widget(Gun(ob))
+        Clock.schedule_interval(ob.update, 1 / 60)
+        Clock.schedule_interval(ob.spawn_enemy, 2)
+        return ob
 
 
 if __name__ == '__main__':
