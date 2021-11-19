@@ -6,24 +6,32 @@ from mastering_imports.objects import Sum, Sub, InputArea, Gun, GunChulo, Enemy
 
 
 class WarZone(Widget):
+    num_enemies = 10
     enemies = []
     bullets = Gun.bullets
     bullets_Sum = GunChulo.bullets
 
     def spawn_enemy_simple(self, dt):
-        enemy = Enemy(0)
-        self.enemies.append(enemy)
-        self.add_widget(enemy)
+        if self.num_enemies != 0:
+            enemy = Enemy(0)
+            self.enemies.append(enemy)
+            self.add_widget(enemy)
+            self.num_enemies -= 1
 
     def spawn_enemy_sum(self, dt):
-        enemy = Enemy(150)
-        self.enemies.append(enemy)
-        self.add_widget(enemy)
+        if self.num_enemies != 0:
+            enemy = Enemy(150)
+            self.enemies.append(enemy)
+            self.add_widget(enemy)
+            self.num_enemies -= 1
 
     def spawn_enemy_sub(self, dt):
-        enemy = Enemy(350)
-        self.enemies.append(enemy)
-        self.add_widget(enemy)
+        if self.num_enemies != 0:
+            enemy = Enemy(350)
+            self.enemies.append(enemy)
+            self.add_widget(enemy)
+            self.num_enemies -= 1
+            print(self.num_enemies)
 
     def move_enemies(self):
         for enemy in self.enemies:
