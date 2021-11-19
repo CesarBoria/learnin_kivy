@@ -233,8 +233,6 @@ if __name__ == '__main__':
         bullets = Gun.bullets
         bullets_Sum = GunChulo.bullets
 
-        # bullets_Sub = GunChulo.bullets
-
         def spawn_enemy_simple(self, dt):
             enemy = Enemy(0)
             self.enemies.append(enemy)
@@ -259,9 +257,7 @@ if __name__ == '__main__':
             self.enemies.remove(enemy)
 
         def kill_bullet(self, bullet):
-            # self.bullets.remove(bullet)  # This one only works with the simple gun.
-            # bullet.shooting_event.unschedule() The Gun has the property shooting event, not the bullet.
-            self.bullets.clear()
+            self.bullets.remove(bullet)  # This one only works with the simple gun.
             self.remove_widget(bullet)
 
         def update(self, dt):
