@@ -11,7 +11,9 @@ class MyApp(App):
         ob.add_widget(Gun(ob))
         ob.add_widget(GunAdministrator(ob))
         Clock.schedule_interval(ob.update, 1 / 60)
-        Clock.schedule_interval(ob.spawn_enemy, 2)
+        Clock.schedule_interval(ob.spawn_enemy_simple, 2)
+        Clock.schedule_interval(ob.spawn_enemy_sum, 6)
+        Clock.schedule_interval(ob.spawn_enemy_sub, 7)
         return ob
 
 

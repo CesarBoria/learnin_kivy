@@ -10,10 +10,18 @@ class WarZone(Widget):
     bullets = Gun.bullets
     bullets_Sum = GunChulo.bullets
 
-    # bullets_Sub = GunChulo.bullets
+    def spawn_enemy_simple(self, dt):
+        enemy = Enemy(0)
+        self.enemies.append(enemy)
+        self.add_widget(enemy)
 
-    def spawn_enemy(self, dt):
-        enemy = Enemy()
+    def spawn_enemy_sum(self, dt):
+        enemy = Enemy(150)
+        self.enemies.append(enemy)
+        self.add_widget(enemy)
+
+    def spawn_enemy_sub(self, dt):
+        enemy = Enemy(350)
         self.enemies.append(enemy)
         self.add_widget(enemy)
 
@@ -21,38 +29,29 @@ class WarZone(Widget):
         for enemy in self.enemies:
             enemy.move()
 
-    def kill_specific_enemy(self, enemy):
+    def kill_enemy(self, enemy):
         self.remove_widget(enemy)
         self.enemies.remove(enemy)
 
-    def kill_specific_bullet(self, bullet):
+    def kill_bullet(self, bullet):
         self.bullets.remove(bullet)  # This one only works with the simple gun.
-        # self.bullets.clear()
-        self.bullets_Sum.clear()
         self.remove_widget(bullet)
-
-    def kill_corresponding_enemies_bullets(self):
-        for enemy in self.enemies:
-            for bullet in self.bullets:
-                print(self.bullets)
-                if enemy.check_collision(bullet):
-                    self.kill_specific_bullet(bullet=bullet)
-                    self.kill_specific_enemy(enemy=enemy)
-                print(self.bullets)
-            for bullet in self.bullets_Sum:
-                if enemy.check_collision(bullet):
-                    self.kill_specific_bullet(bullet=bullet)
-                    self.kill_specific_enemy(enemy=enemy)
-
-    def game_over(self):
-        for enemy in self.enemies:
-            if enemy.check_conquest():
-                pass  # TODO: Run Game Over Routine.
 
     def update(self, dt):
         self.move_enemies()
-        self.kill_corresponding_enemies_bullets()
-        self.game_over()
+        for enemy in self.enemies:
+            for bullet in self.bullets:
+                if enemy.check_collision(bullet):
+                    self.kill_bullet(bullet=bullet)
+                    self.kill_enemy(enemy=enemy)
+            for bullet in self.bullets_Sum:
+                if enemy.check_collision(bullet):
+                    self.kill_bullet(bullet=bullet)
+                    self.kill_enemy(enemy=enemy)
+            if enemy.check_conquest():
+                pass  # TODO: Run Game Over Routine.
+        for bullet in self.bullets:
+            bullet.move('dt')
 
 
 if __name__ == '__main__':
@@ -106,13 +105,64 @@ if __name__ == '__main__':
             self.update_colors()
 
 
+    class WarZone(Widget):
+        enemies = []
+        bullets = Gun.bullets
+        bullets_Sum = GunChulo.bullets
+
+        def spawn_enemy_simple(self, dt):
+            enemy = Enemy(0)
+            self.enemies.append(enemy)
+            self.add_widget(enemy)
+
+        def spawn_enemy_sum(self, dt):
+            enemy = Enemy(150)
+            self.enemies.append(enemy)
+            self.add_widget(enemy)
+
+        def spawn_enemy_sub(self, dt):
+            enemy = Enemy(350)
+            self.enemies.append(enemy)
+            self.add_widget(enemy)
+
+        def move_enemies(self):
+            for enemy in self.enemies:
+                enemy.move()
+
+        def kill_enemy(self, enemy):
+            self.remove_widget(enemy)
+            self.enemies.remove(enemy)
+
+        def kill_bullet(self, bullet):
+            self.bullets.remove(bullet)  # This one only works with the simple gun.
+            self.remove_widget(bullet)
+
+        def update(self, dt):
+            self.move_enemies()
+            for enemy in self.enemies:
+                for bullet in self.bullets:
+                    if enemy.check_collision(bullet):
+                        self.kill_bullet(bullet=bullet)
+                        self.kill_enemy(enemy=enemy)
+                for bullet in self.bullets_Sum:
+                    if enemy.check_collision(bullet):
+                        self.kill_bullet(bullet=bullet)
+                        self.kill_enemy(enemy=enemy)
+                if enemy.check_conquest():
+                    pass  # TODO: Run Game Over Routine.
+            for bullet in self.bullets:
+                bullet.move('dt')
+
+
     class MyApp(App):
         def build(self):
             ob = WarZone()
             ob.add_widget(Gun(ob))
             ob.add_widget(GunAdministrator(ob))
             Clock.schedule_interval(ob.update, 1 / 60)
-            Clock.schedule_interval(ob.spawn_enemy, 2)
+            Clock.schedule_interval(ob.spawn_enemy_simple, 2)
+            Clock.schedule_interval(ob.spawn_enemy_sum, 6)
+            Clock.schedule_interval(ob.spawn_enemy_sub, 7)
             return ob
 
 

@@ -118,7 +118,7 @@ class Gun(Widget):
         self.shooting_event = None
 
     def spawn_bullet(self):
-        self.b = Bullet(x=self.x+45)
+        self.b = Bullet(x=self.x + 45)
         self.GUI.add_widget(self.b)
         self.GUI.bullets.append(self.b)
 
@@ -144,7 +144,7 @@ class GunChulo(RelativeLayout):
         self.shooting_event = None
 
     def spawn_bullet(self):
-        self.b = Bullet(self.x+200)
+        self.b = Bullet(self.x + 200)
         self.holder.add_widget(self.b)
         self.holder.bullets.append(self.b)
 
