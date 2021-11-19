@@ -172,6 +172,16 @@ class Sub(GunChulo):
     operation = f'{first} {operator} {second}'
     result = str(eval(operation))
 
+    def shoot(self):  # We override the method so that the limit applies at every shoot.
+        self.spawn_bullet()
+        limit = randint(0, 9)
+        self.first, self.second = randint(limit, 9), randint(0, limit)
+        self.operation = f'{self.first} {self.operator} {self.second}'
+        self.result = str(eval(self.operation))
+        self.response = ''
+        self.state = 'OFF'
+        self.color = [1 for _ in range(4)]
+
 
 class InputArea(Widget):
     pass
