@@ -63,14 +63,6 @@ Builder.load_string('''
         Rectangle:
             pos: root.pos
             size: root.size
-        Color:
-            rgba: 0, 1, 0, 0.5
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    canvas:
-        Rectangle:
-            pos: self.width/2-5, self.y
             size: 10, 100
 <GunChulo>:
     Button:
@@ -90,8 +82,11 @@ class Enemy(Widget):
     s = NumericProperty(100)
     walked = 0
 
+    def __init__(self, x, **kwargs):
+        super().__init__(**kwargs)
+        self.x = x
+
     def move(self):
-        self.x = 00
         self.y = self.parent.height - 100 - self.walked
         self.walked += 1
 
@@ -105,6 +100,10 @@ class Enemy(Widget):
 
 
 class Bullet(Widget):
+    def __init__(self, x, **kwargs):
+        super().__init__(**kwargs)
+        self.x = x
+
     def move(self, dt):
         self.y += 10
 
@@ -119,13 +118,12 @@ class Gun(Widget):
         self.shooting_event = None
 
     def spawn_bullet(self):
-        self.b = Bullet()
+        self.b = Bullet(x=self.x+45)
         self.GUI.add_widget(self.b)
         self.GUI.bullets.append(self.b)
 
     def shoot(self):
         self.spawn_bullet()
-        self.shooting_event = Clock.schedule_interval(self.b.move, 1 / 60)
 
 
 class GunChulo(RelativeLayout):
@@ -146,15 +144,12 @@ class GunChulo(RelativeLayout):
         self.shooting_event = None
 
     def spawn_bullet(self):
-        self.b = Bullet()
+        self.b = Bullet(self.x+200)
         self.holder.add_widget(self.b)
         self.holder.bullets.append(self.b)
 
     def shoot(self):
         self.spawn_bullet()
-        self.shooting_event = Clock.schedule_interval(self.b.move, 1 / 60)
-
-        print('PIUM')
         self.first, self.second = randint(0, 9), randint(0, 9)
         self.operation = f'{self.first} {self.operator} {self.second}'
         self.result = str(eval(self.operation))
@@ -240,8 +235,18 @@ if __name__ == '__main__':
 
         # bullets_Sub = GunChulo.bullets
 
-        def spawn_enemy(self, dt):
-            enemy = Enemy()
+        def spawn_enemy_simple(self, dt):
+            enemy = Enemy(0)
+            self.enemies.append(enemy)
+            self.add_widget(enemy)
+
+        def spawn_enemy_sum(self, dt):
+            enemy = Enemy(150)
+            self.enemies.append(enemy)
+            self.add_widget(enemy)
+
+        def spawn_enemy_sub(self, dt):
+            enemy = Enemy(350)
             self.enemies.append(enemy)
             self.add_widget(enemy)
 
@@ -282,7 +287,9 @@ if __name__ == '__main__':
             ob.add_widget(Gun(ob))
             ob.add_widget(GunAdministrator(ob))
             Clock.schedule_interval(ob.update, 1 / 60)
-            Clock.schedule_interval(ob.spawn_enemy, 2)
+            Clock.schedule_interval(ob.spawn_enemy_simple, 2)
+            Clock.schedule_interval(ob.spawn_enemy_sum, 6)
+            Clock.schedule_interval(ob.spawn_enemy_sub, 7)
             return ob
 
 
