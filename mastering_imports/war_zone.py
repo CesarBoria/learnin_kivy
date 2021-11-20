@@ -63,6 +63,8 @@ class WarZone(Widget):
 
     def win_routine(self):
         if self.killed_enemies == self.num_enemies:
+            self.a.cancel()
+            self.b.cancel()
             print('WIN!')
 
     def update(self, dt):
