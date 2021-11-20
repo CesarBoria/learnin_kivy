@@ -7,31 +7,39 @@ from mastering_imports.objects import Sum, Sub, InputArea, Gun, GunChulo, Enemy
 
 class WarZone(Widget):
     num_enemies = 10
+    spawned_enemies = 0
+    killed_enemies = 0
     enemies = []
     bullets = Gun.bullets
     bullets_Sum = GunChulo.bullets
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.a = Clock.schedule_interval(self.update, 1 / 60)
+        self.b = Clock.schedule_interval(self.spawn_enemy_simple, 2)
+        Clock.schedule_interval(self.spawn_enemy_sum, 6)
+        Clock.schedule_interval(self.spawn_enemy_sub, 7)
+
     def spawn_enemy_simple(self, dt):
-        if self.num_enemies != 0:
+        if self.num_enemies > self.spawned_enemies:
             enemy = Enemy(0)
             self.enemies.append(enemy)
             self.add_widget(enemy)
-            self.num_enemies -= 1
+            self.spawned_enemies += 1
 
     def spawn_enemy_sum(self, dt):
-        if self.num_enemies != 0:
+        if self.num_enemies > self.spawned_enemies:
             enemy = Enemy(150)
             self.enemies.append(enemy)
             self.add_widget(enemy)
-            self.num_enemies -= 1
+            self.spawned_enemies += 1
 
     def spawn_enemy_sub(self, dt):
-        if self.num_enemies != 0:
+        if self.num_enemies > self.spawned_enemies:
             enemy = Enemy(350)
             self.enemies.append(enemy)
             self.add_widget(enemy)
-            self.num_enemies -= 1
-            print(self.num_enemies)
+            self.spawned_enemies += 1
 
     def move_enemies(self):
         for enemy in self.enemies:
@@ -40,13 +48,27 @@ class WarZone(Widget):
     def kill_enemy(self, enemy):
         self.remove_widget(enemy)
         self.enemies.remove(enemy)
+        self.killed_enemies += 1
 
     def kill_bullet(self, bullet):
         self.bullets.remove(bullet)  # This one only works with the simple gun.
         self.remove_widget(bullet)
 
+    def game_over_routine(self):
+        for enemy in self.enemies:
+            if enemy.check_conquest():
+                self.a.cancel()
+                self.b.cancel()
+                print('GAME OVER')
+
+    def win_routine(self):
+        if self.killed_enemies == self.num_enemies:
+            print('WIN!')
+
     def update(self, dt):
         self.move_enemies()
+        self.game_over_routine()
+        self.win_routine()
         for enemy in self.enemies:
             for bullet in self.bullets:
                 if enemy.check_collision(bullet):
@@ -56,12 +78,10 @@ class WarZone(Widget):
                 if enemy.check_collision(bullet):
                     self.kill_bullet(bullet=bullet)
                     self.kill_enemy(enemy=enemy)
-            if enemy.check_conquest():
-                pass  # TODO: Run Game Over Routine.
         for bullet in self.bullets:
             bullet.move('dt')
 
-
+'''
 if __name__ == '__main__':
     class GunAdministrator(Widget):
         guns = []
@@ -176,3 +196,4 @@ if __name__ == '__main__':
 
     app_instance = MyApp()
     app_instance.run()
+'''
