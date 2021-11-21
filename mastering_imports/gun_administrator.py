@@ -1,18 +1,17 @@
-from kivy.app import App
 from kivy.uix.widget import Widget
-from kivy.clock import Clock
 
-from mastering_imports.objects import Sum, Sub, InputArea, Gun, GunChulo, Enemy
+from components.input_area import InputArea
+from components.guns.sum_gun import Sum
+from components.guns.sub_gun import Sub
 
 
 class GunAdministrator(Widget):
     guns = []
 
-    def __init__(self, GUI, **kwargs):
+    def __init__(self, controller, **kwargs):
         super().__init__(**kwargs)
-        self.GUI = GUI
-        gun1 = Sum(self.GUI)
-        gun2 = Sub(self.GUI)
+        gun1 = Sum(controller)
+        gun2 = Sub(controller)
         gun2.pos = 200, 0
         gun2.size = 200, 200
         gun1.pos = 0, 0
@@ -53,70 +52,3 @@ class GunAdministrator(Widget):
             if gun.state == 'ON':
                 gun.response += text
         self.update_colors()
-
-
-if __name__ == '__main__':
-
-    class WarZone(Widget):
-        enemies = []
-        bullets = Gun.bullets
-        bullets_Sum = GunChulo.bullets
-
-        def spawn_enemy_simple(self, dt):
-            enemy = Enemy(0)
-            self.enemies.append(enemy)
-            self.add_widget(enemy)
-
-        def spawn_enemy_sum(self, dt):
-            enemy = Enemy(150)
-            self.enemies.append(enemy)
-            self.add_widget(enemy)
-
-        def spawn_enemy_sub(self, dt):
-            enemy = Enemy(350)
-            self.enemies.append(enemy)
-            self.add_widget(enemy)
-
-        def move_enemies(self):
-            for enemy in self.enemies:
-                enemy.move()
-
-        def kill_enemy(self, enemy):
-            self.remove_widget(enemy)
-            self.enemies.remove(enemy)
-
-        def kill_bullet(self, bullet):
-            self.bullets.remove(bullet)  # This one only works with the simple gun.
-            self.remove_widget(bullet)
-
-        def update(self, dt):
-            self.move_enemies()
-            for enemy in self.enemies:
-                for bullet in self.bullets:
-                    if enemy.check_collision(bullet):
-                        self.kill_bullet(bullet=bullet)
-                        self.kill_enemy(enemy=enemy)
-                for bullet in self.bullets_Sum:
-                    if enemy.check_collision(bullet):
-                        self.kill_bullet(bullet=bullet)
-                        self.kill_enemy(enemy=enemy)
-                if enemy.check_conquest():
-                    pass  # TODO: Run Game Over Routine.
-            for bullet in self.bullets:
-                bullet.move('dt')
-
-
-    class MyApp(App):
-        def build(self):
-            ob = WarZone()
-            ob.add_widget(Gun(ob))
-            ob.add_widget(GunAdministrator(ob))
-            Clock.schedule_interval(ob.update, 1 / 60)
-            Clock.schedule_interval(ob.spawn_enemy_simple, 2)
-            Clock.schedule_interval(ob.spawn_enemy_sum, 6)
-            Clock.schedule_interval(ob.spawn_enemy_sub, 7)
-            return ob
-
-
-    app_instance = MyApp()
-    app_instance.run()

@@ -6,7 +6,7 @@ from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
 from kivy.properties import StringProperty
 
-from mastering_imports.war_zone import WarZone
+from war_zone import WarZone
 
 Builder.load_string('''
 <Info>:
@@ -31,30 +31,13 @@ class Info(Widget):
     killed = StringProperty()
     to_kill = StringProperty()
 
-    def __init__(self, WZ, **kwargs):
+    def __init__(self, state, **kwargs):
         super().__init__(**kwargs)
-        self.WZ = WZ
-        self.killed = str(WZ.killed_enemies)
-        self.to_kill = str(WZ.num_enemies - WZ.killed_enemies)
-        Clock.schedule_interval(partial(self.a), 1)
+        self.state = state
+        self.killed = str(state["killed_enemies"])
+        self.to_kill = str(state["num_enemies"] - state["killed_enemies"])
 
-    @property
-    def get_killed(self):
-        self.killed = self.WZ.killed_enemies
-        return self.killed
-
-    def a(self, dt):
-        self.killed = str(self.WZ.killed_enemies)
-        self.to_kill = str(self.WZ.num_enemies - self.WZ.killed_enemies)
-
-'''
-class MyApp(App):
-    def build(self):
-        ob = Info()
-        return ob
-
-
-if __name__ == '__main__':
-    app_instance = MyApp()
-    app_instance.run()
-'''
+    def update(self):
+        self.killed = str(self.state["killed_enemies"])
+        self.to_kill = str(
+            self.state["num_enemies"] - self.state["killed_enemies"])
