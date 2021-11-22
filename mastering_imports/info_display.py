@@ -19,33 +19,17 @@ Builder.load_string('''
             text: 'Zoombees to kill:'
         Label:
             text: root.to_kill
-        Label:
-            text: 'Zoombees killed:'
-        Label:
-            text: root.killed
+        # Label:
+        #     text: 'Zoombees killed:'
+        # Label:
+        #     text: root.killed
     
 ''')
 
 
 class Info(Widget):
-    killed = StringProperty()
-    to_kill = StringProperty()
-
-    def __init__(self, WZ, **kwargs):
-        super().__init__(**kwargs)
-        self.WZ = WZ
-        self.killed = str(WZ.killed_enemies)
-        self.to_kill = str(WZ.num_enemies - WZ.killed_enemies)
-        Clock.schedule_interval(partial(self.a), 1)
-
-    @property
-    def get_killed(self):
-        self.killed = self.WZ.killed_enemies
-        return self.killed
-
-    def a(self, dt):
-        self.killed = str(self.WZ.killed_enemies)
-        self.to_kill = str(self.WZ.num_enemies - self.WZ.killed_enemies)
+    # killed = StringProperty()
+    to_kill = StringProperty('10')
 
 '''
 class MyApp(App):

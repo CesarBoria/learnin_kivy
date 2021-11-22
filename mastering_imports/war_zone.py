@@ -13,8 +13,10 @@ class WarZone(Widget):
     bullets = Gun.bullets
     bullets_Sum = GunChulo.bullets
 
-    def __init__(self, **kwargs):
+    def __init__(self, info, **kwargs):
         super().__init__(**kwargs)
+        self.info = info
+        self.add_widget(self.info)
         self.a = Clock.schedule_interval(self.update, 1 / 60)
         self.b = Clock.schedule_interval(self.spawn_enemy_simple, 2)
         Clock.schedule_interval(self.spawn_enemy_sum, 6)
@@ -49,6 +51,7 @@ class WarZone(Widget):
         self.remove_widget(enemy)
         self.enemies.remove(enemy)
         self.killed_enemies += 1
+        self.info.to_kill =  str(self.num_enemies - self.killed_enemies)
 
     def kill_bullet(self, bullet):
         self.bullets.remove(bullet)  # This one only works with the simple gun.
