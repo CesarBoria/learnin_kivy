@@ -88,7 +88,7 @@ class Enemy(Widget):
 
     def move(self):
         self.y = self.parent.height - 100 - self.walked
-        self.walked += 0.5
+        self.walked += 0.9
 
     def check_collision(self, bullet):
         if self.collide_widget(bullet):

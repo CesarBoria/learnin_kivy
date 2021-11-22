@@ -20,6 +20,7 @@ Builder.load_string('''
         text: 'P L A Y   A G A I N'
         size: 200, 100
         pos: 300, 200
+        on_press: root.play_again()
 ''')
 
 
@@ -29,6 +30,10 @@ class Result(Widget):
     def __init__(self, text, **kwargs):
         super().__init__(**kwargs)
         self.text = text
+
+    def play_again(self):
+        print(1)
+        # TODO: Call the WarZone.restart() and set WarZone.playing = True
 
 
 class MyApp(App):

@@ -12,6 +12,7 @@ class WarZone(Widget):
     enemies = []
     bullets = Gun.bullets
     bullets_Sum = GunChulo.bullets
+    playing = True
 
     def __init__(self, info, **kwargs):
         super().__init__(**kwargs)
@@ -19,8 +20,8 @@ class WarZone(Widget):
         self.add_widget(self.info)
         self.update_event = Clock.schedule_interval(self.update, 1 / 60)
         self.spawn_enemy_event = Clock.schedule_interval(self.spawn_enemy_simple, 2)
-        Clock.schedule_interval(self.spawn_enemy_sum, 6)
-        Clock.schedule_interval(self.spawn_enemy_sub, 7)
+        self.spawn_enemy_event_sum = Clock.schedule_interval(self.spawn_enemy_sum, 6)
+        self.spawn_enemy_event_sub = Clock.schedule_interval(self.spawn_enemy_sub, 7)
 
     def spawn_enemy_simple(self, dt):
         if self.num_enemies > self.spawned_enemies:
@@ -54,23 +55,33 @@ class WarZone(Widget):
         self.info.to_kill = str(self.num_enemies - self.killed_enemies)
 
     def kill_bullet(self, bullet):
-        self.bullets.remove(bullet)  # This one only works with the simple gun.
+        self.bullets.remove(bullet)
         self.remove_widget(bullet)
 
     def game_over_routine(self):
         for enemy in self.enemies:
             if enemy.check_conquest():
-                self.update_event.cancel()
-                self.spawn_enemy_event.cancel()
-                print('GAME OVER')
+                self.playing = False
                 self.add_widget(Result('L O S E R'))
 
     def win_routine(self):
         if self.killed_enemies == self.num_enemies:
-            self.update_event.cancel()
-            self.spawn_enemy_event.cancel()
-            print('WIN!')
+            self.playing = False
             self.add_widget(Result('W I N E R'))
+
+    def restart(self):
+        self.num_enemies = 10
+        self.spawned_enemies = 0
+        self.killed_enemies = 0
+        self.enemies = []
+        self.playing = True
+        # TODO: Call the clocks.
+
+    def cancel_events(self):
+        self.spawn_enemy_event.cancel()
+        self.spawn_enemy_event_sub.cancel()
+        self.spawn_enemy_event_sum.cancel()
+        self.update_event.cancel()
 
     def update(self, dt):
         self.move_enemies()
@@ -87,3 +98,5 @@ class WarZone(Widget):
                     self.kill_enemy(enemy=enemy)
         for bullet in self.bullets:
             bullet.move('dt')
+        if not self.playing:
+            self.cancel_events()
