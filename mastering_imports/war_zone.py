@@ -2,6 +2,7 @@ from kivy.uix.widget import Widget
 from kivy.clock import Clock
 
 from mastering_imports.objects import Gun, GunChulo, Enemy
+from mastering_imports.result import Result
 
 
 class WarZone(Widget):
@@ -50,7 +51,7 @@ class WarZone(Widget):
         self.remove_widget(enemy)
         self.enemies.remove(enemy)
         self.killed_enemies += 1
-        self.info.to_kill =  str(self.num_enemies - self.killed_enemies)
+        self.info.to_kill = str(self.num_enemies - self.killed_enemies)
 
     def kill_bullet(self, bullet):
         self.bullets.remove(bullet)  # This one only works with the simple gun.
@@ -62,12 +63,14 @@ class WarZone(Widget):
                 self.update_event.cancel()
                 self.spawn_enemy_event.cancel()
                 print('GAME OVER')
+                self.add_widget(Result('L O S E R'))
 
     def win_routine(self):
         if self.killed_enemies == self.num_enemies:
             self.update_event.cancel()
             self.spawn_enemy_event.cancel()
             print('WIN!')
+            self.add_widget(Result('W I N E R'))
 
     def update(self, dt):
         self.move_enemies()
