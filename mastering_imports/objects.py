@@ -82,13 +82,14 @@ class Enemy(Widget):
     s = NumericProperty(100)
     walked = 0
 
-    def __init__(self, x, **kwargs):
+    def __init__(self, x, speed, **kwargs):
         super().__init__(**kwargs)
         self.x = x
+        self.speed = speed
 
     def move(self):
         self.y = self.parent.height - 100 - self.walked
-        self.walked += 0.9
+        self.walked += self.speed
 
     def check_collision(self, bullet):
         if self.collide_widget(bullet):

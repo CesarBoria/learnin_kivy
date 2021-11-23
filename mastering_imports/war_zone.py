@@ -23,24 +23,25 @@ class WarZone(Widget):
         self.spawn_enemy_event_sum = Clock.schedule_interval(self.spawn_enemy_sum, 6)
         self.spawn_enemy_event_sub = Clock.schedule_interval(self.spawn_enemy_sub, 7)
         self.result = None
+        self.speed = 0.3
 
     def spawn_enemy_simple(self, dt):
         if self.num_enemies > self.spawned_enemies:
-            enemy = Enemy(0)
+            enemy = Enemy(0, self.speed)
             self.enemies.append(enemy)
             self.add_widget(enemy)
             self.spawned_enemies += 1
 
     def spawn_enemy_sum(self, dt):
         if self.num_enemies > self.spawned_enemies:
-            enemy = Enemy(150)
+            enemy = Enemy(150, self.speed)
             self.enemies.append(enemy)
             self.add_widget(enemy)
             self.spawned_enemies += 1
 
     def spawn_enemy_sub(self, dt):
         if self.num_enemies > self.spawned_enemies:
-            enemy = Enemy(350)
+            enemy = Enemy(350, self.speed)
             self.enemies.append(enemy)
             self.add_widget(enemy)
             self.spawned_enemies += 1
@@ -65,12 +66,14 @@ class WarZone(Widget):
                 self.playing = False
                 self.result = Result(self, 'L O S E R')
                 self.add_widget(self.result)
+                self.speed -= 0.1
 
     def win_routine(self):
         if self.killed_enemies == self.num_enemies:
             self.playing = False
             self.result = Result(self, 'W I N E R')
             self.add_widget(self.result)
+            self.speed += 0.4
 
     def clean_screen(self):
         for enemy in self.enemies:
@@ -90,6 +93,7 @@ class WarZone(Widget):
         self.spawn_enemy_event_sub = Clock.schedule_interval(self.spawn_enemy_sub, 7)
         self.clean_screen()
         self.enemies = []
+        print(self.speed)
 
     def cancel_events(self):
         self.spawn_enemy_event.cancel()
