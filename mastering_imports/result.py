@@ -1,10 +1,7 @@
 from kivy.app import App
 from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
-from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import NumericProperty, ObjectProperty, ListProperty, StringProperty
-from kivy.clock import Clock
-from random import random, randint
 
 Builder.load_string('''
 <Result>:
@@ -16,6 +13,9 @@ Builder.load_string('''
     Label:
         text: root.text
         pos: 350, 350
+    Label:
+        text: root.speed
+        pos: 350, 100
     Button:
         text: 'P L A Y   A G A I N'
         size: 200, 100
@@ -26,11 +26,13 @@ Builder.load_string('''
 
 class Result(Widget):
     text = StringProperty()
+    speed = StringProperty()
 
-    def __init__(self, WZ, text, **kwargs):
+    def __init__(self, WZ, text, speed, **kwargs):
         super().__init__(**kwargs)
         self.WZ = WZ
         self.text = text
+        self.speed = str(round(speed, 2))
 
     def play_again(self):
         self.WZ.restart()

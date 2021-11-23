@@ -64,16 +64,19 @@ class WarZone(Widget):
         for enemy in self.enemies:
             if enemy.check_conquest():
                 self.playing = False
-                self.result = Result(self, 'L O S E R')
+                percentage_killed = self.killed_enemies / self.num_enemies
+                next_speed = percentage_killed * self.speed
+                self.result = Result(self, 'L O S E R', next_speed)
                 self.add_widget(self.result)
-                self.speed -= 0.1
+                self.speed = next_speed
 
     def win_routine(self):
         if self.killed_enemies == self.num_enemies:
             self.playing = False
-            self.result = Result(self, 'W I N E R')
+            next_speed = self.speed + 0.1
+            self.result = Result(self, 'W I N E R', next_speed)
             self.add_widget(self.result)
-            self.speed += 0.4
+            self.speed = next_speed
 
     def clean_screen(self):
         for enemy in self.enemies:
