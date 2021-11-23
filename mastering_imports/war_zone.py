@@ -22,6 +22,7 @@ class WarZone(Widget):
         self.spawn_enemy_event = Clock.schedule_interval(self.spawn_enemy_simple, 2)
         self.spawn_enemy_event_sum = Clock.schedule_interval(self.spawn_enemy_sum, 6)
         self.spawn_enemy_event_sub = Clock.schedule_interval(self.spawn_enemy_sub, 7)
+        self.result = None
 
     def spawn_enemy_simple(self, dt):
         if self.num_enemies > self.spawned_enemies:
@@ -62,20 +63,33 @@ class WarZone(Widget):
         for enemy in self.enemies:
             if enemy.check_conquest():
                 self.playing = False
-                self.add_widget(Result('L O S E R'))
+                self.result = Result(self, 'L O S E R')
+                self.add_widget(self.result)
 
     def win_routine(self):
         if self.killed_enemies == self.num_enemies:
             self.playing = False
-            self.add_widget(Result('W I N E R'))
+            self.result = Result(self, 'W I N E R')
+            self.add_widget(self.result)
+
+    def clean_screen(self):
+        for enemy in self.enemies:
+            self.remove_widget(enemy)
+        for bullet in self.bullets:
+            self.remove_widget(bullet)
+        self.remove_widget(self.result)
 
     def restart(self):
         self.num_enemies = 10
         self.spawned_enemies = 0
         self.killed_enemies = 0
-        self.enemies = []
         self.playing = True
-        # TODO: Call the clocks.
+        self.update_event = Clock.schedule_interval(self.update, 1 / 60)
+        self.spawn_enemy_event = Clock.schedule_interval(self.spawn_enemy_simple, 2)
+        self.spawn_enemy_event_sum = Clock.schedule_interval(self.spawn_enemy_sum, 6)
+        self.spawn_enemy_event_sub = Clock.schedule_interval(self.spawn_enemy_sub, 7)
+        self.clean_screen()
+        self.enemies = []
 
     def cancel_events(self):
         self.spawn_enemy_event.cancel()

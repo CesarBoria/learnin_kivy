@@ -27,13 +27,13 @@ Builder.load_string('''
 class Result(Widget):
     text = StringProperty()
 
-    def __init__(self, text, **kwargs):
+    def __init__(self, WZ, text, **kwargs):
         super().__init__(**kwargs)
+        self.WZ = WZ
         self.text = text
 
     def play_again(self):
-        print(1)
-        # TODO: Call the WarZone.restart() and set WarZone.playing = True
+        self.WZ.restart()
 
 
 class MyApp(App):
