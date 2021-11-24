@@ -23,7 +23,7 @@ class WarZone(Widget):
         self.spawn_enemy_event_sum = Clock.schedule_interval(self.spawn_enemy_sum, 6)
         self.spawn_enemy_event_sub = Clock.schedule_interval(self.spawn_enemy_sub, 7)
         self.result = None
-        self.speed = 0.3
+        self.speed = 0.1
 
     def spawn_enemy_simple(self, dt):
         if self.num_enemies > self.spawned_enemies:
@@ -64,7 +64,7 @@ class WarZone(Widget):
         for enemy in self.enemies:
             if enemy.check_conquest():
                 self.playing = False
-                percentage_killed = self.killed_enemies / self.num_enemies
+                percentage_killed = self.killed_enemies / self.num_enemies if self.killed_enemies != 0 else 0.05
                 next_speed = percentage_killed * self.speed
                 self.result = Result(self, 'L O S E R', next_speed)
                 self.add_widget(self.result)
@@ -74,7 +74,7 @@ class WarZone(Widget):
         if self.killed_enemies == self.num_enemies:
             self.playing = False
             next_speed = self.speed + 0.1
-            self.result = Result(self, 'W I N E R', next_speed)
+            self.result = Result(self, 'W I N N E R', next_speed)
             self.add_widget(self.result)
             self.speed = next_speed
 
